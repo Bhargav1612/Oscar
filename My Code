@@ -1,0 +1,32 @@
+#import "YourViewController.h"
+
+@interface YourViewController ()
+
+@property (nonatomic, strong) UIView *overlayView;
+
+@end
+
+@implementation YourViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setupOverlay];
+}
+
+- (void)setupOverlay {
+    // Create the overlay view
+    self.overlayView = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.overlayView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+    self.overlayView.hidden = YES;  // Initially hidden
+    
+    [self.view addSubview:self.overlayView];
+    
+    // Display the overlay (example trigger)
+    [self showOverlay];
+}
+
+- (void)showOverlay {
+    self.overlayView.hidden = NO;
+}
+
+@end
