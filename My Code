@@ -1,32 +1,9 @@
-#import "YourViewController.h"
-
-@interface YourViewController ()
-
-@property (nonatomic, strong) UIView *overlayView;
-
-@end
-
-@implementation YourViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self setupOverlay];
-}
-
 - (void)setupOverlay {
-    // Create the overlay view
-    self.overlayView = [[UIView alloc] initWithFrame:self.view.bounds];
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    self.overlayView = [[UIView alloc] initWithFrame:keyWindow.bounds];
     self.overlayView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-    self.overlayView.hidden = YES;  // Initially hidden
-    
-    [self.view addSubview:self.overlayView];
-    
-    // Display the overlay (example trigger)
-    [self showOverlay];
-}
+    self.overlayView.hidden = YES;
 
-- (void)showOverlay {
-    self.overlayView.hidden = NO;
+    [keyWindow addSubview:self.overlayView];
+    NSLog(@"Overlay added to keyWindow");
 }
-
-@end
