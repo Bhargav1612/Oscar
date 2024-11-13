@@ -1,52 +1,19 @@
-import UIKit
+1. Best Features:
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
-    
-    @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var tableView: UITableView!
-    
-    let suggestions = ["iPhone", "iPhone 14", "iPad", "iMac", "AirPods", "MacBook"]
-    var filteredSuggestions: [NSAttributedString] = []
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Set delegates
-        textField.delegate = self
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        // Configure text field to detect text changes
-        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-    }
-    
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        guard let searchText = textField.text else { return }
-        
-        // Filter suggestions and bold the matching part
-        filteredSuggestions = suggestions.compactMap { suggestion in
-            if let range = suggestion.lowercased().range(of: searchText.lowercased()), !searchText.isEmpty {
-                let attributedString = NSMutableAttributedString(string: suggestion)
-                attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: NSRange(range, in: suggestion))
-                return attributedString
-            } else {
-                return NSAttributedString(string: suggestion)
-            }
-        }
-        
-        // Reload the table view with updated suggestions
-        tableView.reloadData()
-    }
-    
-    // MARK: - TableView DataSource Methods
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredSuggestions.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.attributedText = filteredSuggestions[indexPath.row]
-        return cell
-    }
-}
+Summarization of Results
+Search results with source links
+Conversational (Copilot Mode)
+Text, PDF, and image uploads
+Voice mode
+Discover Page - Suggests trending topics and personalized recommendations based on user behavior.
+Search Filters - Customizable search filters for more precise results.
+
+2. Observations
+1. Clean, simple UI.
+2. Personalization - Search results and suggestions based on user interests and history.
+3. Updates information daily and remembers previous queries.
+4. Hybrid functionality between search engine and chatbot.
+5. Dual search modes - fast answers or in-depth responses.
+
+3. Tech Stack 
+Large Language Models (LLMs) & NLP
