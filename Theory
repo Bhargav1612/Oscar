@@ -77,3 +77,106 @@ UIKit: Manages UI elements like buttons, labels, and views.
 Event Handling: Handles touch gestures (e.g., taps, swipes).
 App Lifecycle: Manages the state of the app (launch, background, etc.).
 Multitasking: Handles tasks like background execution.
+
+
+List of topics within UIKit:
+
+*1. UI Components:*
+
+1. UIView
+2. UILabel
+3. UIButton
+4. UITextField
+5. UITextView
+6. UITableViewDataSource
+7. UICollectionView
+8. UITableView
+9. UIImageView
+10. UISlider
+11. UISwitch
+12. UIStepper
+13. UIPickerView
+14. UIDatePicker
+15. UISegmentedControl
+16. UITabBar
+17. UINavigationBar
+18. UIBarButtonItem
+19. UIActivityIndicatorView
+20. UIProgressView
+
+*2. Event Handling Components:*
+
+1. UIResponder
+2. UITouch
+3. UIEvent
+4. UIGestureRecognizer (base class)
+5. UITapGestureRecognizer
+6. UIPinchGestureRecognizer
+7. UIRotationGestureRecognizer
+8. UISwipeGestureRecognizer
+9. UIPanGestureRecognizer
+10. UILongPressGestureRecognizer
+
+*3. View Controller Concepts:*
+
+1. UIViewController
+2. UIViewLifecycle
+3. View loading and unloading
+4. View rotation and layout
+5. Child view controllers
+6. Custom container view controllers
+7. Segues and storyboards
+8. Navigation controllers
+9. Tab bar controllers
+10. Split view controllers
+
+*4. Gesture Recognizers:*
+
+1. UIGestureRecognizer (base class)
+2. UITapGestureRecognizer
+3. UIPinchGestureRecognizer
+4. UIRotationGestureRecognizer
+5. UISwipeGestureRecognizer
+6. UIPanGestureRecognizer
+7. UILongPressGestureRecognizer
+8. Screen Edge Pan Gesture Recognizer
+9. Custom gesture recognizers
+
+*Additional UIKit Topics:*
+
+1. Auto Layout
+2. Constraints
+3. Layout margins
+4. UIStackView
+5. UICollectionViewController
+6. UITableViewDataSource and Delegate
+7. UITableViewDelegate
+8. UIInputView
+9. UIInputViewController
+10. UIKit Dynamics
+
+*UIKit Graphics and Drawing:*
+
+1. Core Graphics
+2. UIBezierPath
+3. UIColor
+4. UIFont
+5. UIImage
+6. UIGraphicsContext
+7. CALayer
+8. CAShapeLayer
+9. CATextLayer
+10. CAGradientLayer
+
+*UIKit Animation:*
+
+1. UIView animation
+2. Core Animation
+3. CALayer animation
+4. CABasicAnimation
+5. CAKeyframeAnimation
+6. CATransition
+7. UIViewPropertyAnimator
+8. UIViewAnimatedTransitioning
+
+
