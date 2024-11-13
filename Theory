@@ -59,3 +59,21 @@ Application Types	Desktop apps (e.g., Finder, Safari for macOS)	Mobile apps (e.g
 Orientation	Fixed landscape or portrait based on monitor	Dynamic rotation support (portrait/landscape)
 Animation and Graphics	Core Animation, Quartz, Metal	Core Animation, Quartz, Metal, SpriteKit
 Key Focus	Productivity and content creation apps	Mobile-first, touch-centric apps
+
+
+
+Component	Description
+Frameworks	Pre-written code and libraries (e.g., UIKit, Foundation, Core Data, etc.)
+APIs	Interfaces to access iOS device features (e.g., camera, GPS, notifications)
+Developer Tools	Tools like Xcode for building, testing, and debugging apps
+Documentation	Guides, references, and code samples to assist developers
+Simulator	Allows testing of iOS apps on a Mac without needing a physical device
+Interface Builder	Visual tool for designing app UIs within Xcode
+
+Cocoa Touch is a set of frameworks and APIs used to build applications for iOS. It is part of the iOS SDK and provides essential tools for developing mobile apps, including user interface components, touch-based interactions, and system-level functionality.
+
+Role in iOS Development:
+UIKit: Manages UI elements like buttons, labels, and views.
+Event Handling: Handles touch gestures (e.g., taps, swipes).
+App Lifecycle: Manages the state of the app (launch, background, etc.).
+Multitasking: Handles tasks like background execution.
