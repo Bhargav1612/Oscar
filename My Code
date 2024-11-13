@@ -1,62 +1,52 @@
-#import "DiscoverViewController.h"
+import UIKit
 
-@interface DiscoverViewController ()
-
-@property (nonatomic, strong) UIView *dimOverlayView;  // For grey-out effect
-@property (nonatomic, strong) UIView *tileView;        // Tile view to display "Hello"
-
-@end
-
-@implementation DiscoverViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
-    // Set up the dim overlay and tile view
-    [self setupOverlay];
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var tableView: UITableView!
+    
+    let suggestions = ["iPhone", "iPhone 14", "iPad", "iMac", "AirPods", "MacBook"]
+    var filteredSuggestions: [NSAttributedString] = []
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Set delegates
+        textField.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        // Configure text field to detect text changes
+        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        guard let searchText = textField.text else { return }
+        
+        // Filter suggestions and bold the matching part
+        filteredSuggestions = suggestions.compactMap { suggestion in
+            if let range = suggestion.lowercased().range(of: searchText.lowercased()), !searchText.isEmpty {
+                let attributedString = NSMutableAttributedString(string: suggestion)
+                attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: NSRange(range, in: suggestion))
+                return attributedString
+            } else {
+                return NSAttributedString(string: suggestion)
+            }
+        }
+        
+        // Reload the table view with updated suggestions
+        tableView.reloadData()
+    }
+    
+    // MARK: - TableView DataSource Methods
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredSuggestions.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.attributedText = filteredSuggestions[indexPath.row]
+        return cell
+    }
 }
-
-// Step 1: Setup the grey-out overlay and tile view
-- (void)setupOverlay {
-    // Create grey-out overlay
-    self.dimOverlayView = [[UIView alloc] initWithFrame:self.view.bounds];
-    self.dimOverlayView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-    self.dimOverlayView.hidden = YES;  // Initially hidden
-    
-    [self.view addSubview:self.dimOverlayView];
-    
-    // Create tile view (centered box)
-    CGFloat tileWidth = 200.0;
-    CGFloat tileHeight = 100.0;
-    self.tileView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tileWidth, tileHeight)];
-    self.tileView.center = self.view.center;  // Center the tile view
-    self.tileView.backgroundColor = [UIColor whiteColor];
-    self.tileView.layer.cornerRadius = 10.0;
-    self.tileView.hidden = YES;  // Initially hidden
-    
-    // Add a label inside the tile view
-    UILabel *helloLabel = [[UILabel alloc] initWithFrame:self.tileView.bounds];
-    helloLabel.text = @"Hello";
-    helloLabel.textAlignment = NSTextAlignmentCenter;
-    helloLabel.font = [UIFont boldSystemFontOfSize:20.0];
-    [self.tileView addSubview:helloLabel];
-    
-    [self.dimOverlayView addSubview:self.tileView];
-}
-
-// Step 2: Show the overlay and tile when the page is loaded
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self showOverlay];
-}
-
-// Step 3: Display the overlay and tile view
-- (void)showOverlay {
-    self.dimOverlayView.hidden = NO;  // Show grey-out overlay
-    self.tileView.hidden = NO;        // Show tile view on top
-    
-    NSLog(@"Overlay and Tile view displayed");
-}
-
-@end
