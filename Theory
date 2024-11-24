@@ -83,26 +83,27 @@ List of topics within UIKit:
 
 *1. UI Components:*
 
-1. UIView
-2. UILabel
-3. UIButton
-4. UITextField
-5. UITextView
-6. UITableViewDataSource
-7. UICollectionView
-8. UITableView
-9. UIImageView
-10. UISlider
-11. UISwitch
-12. UIStepper
-13. UIPickerView
-14. UIDatePicker
-15. UISegmentedControl
-16. UITabBar
-17. UINavigationBar
-18. UIBarButtonItem
-19. UIActivityIndicatorView
-20. UIProgressView
+UIView
+UILabel
+UIButton
+UIImageView
+UITextField
+UITextView
+UISwitch
+UISlider
+UISegmentedControl
+UIStepper
+UIDatePicker
+UIPickerView
+UINavigationBar
+UITabBar
+UIBarButtonItem
+UITableView
+UITableViewDataSource
+UICollectionView
+UIProgressView
+UIActivityIndicatorView
+
 
 *2. Event Handling Components:*
 
