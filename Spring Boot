@@ -1,0 +1,72 @@
+1. Basics of Spring Boot
+What is Spring Boot? (Comparison with Spring Framework)
+Setting up a Spring Boot project
+Spring Boot Annotations (@SpringBootApplication, @Component, etc.)
+Application properties and YAML configuration
+Running the Spring Boot application (embedded server)
+2. Dependency Injection and Inversion of Control
+Overview of IoC and DI concepts
+@Component, @Service, @Repository, @Controller
+@Autowired and Constructor Injection
+Scopes of Beans (@Scope)
+3. REST API Development
+Creating REST Controllers (@RestController)
+Handling HTTP methods: GET, POST, PUT, DELETE
+Path Variables and Request Parameters
+Consuming JSON and producing responses
+Exception Handling in REST APIs (@ExceptionHandler, @ControllerAdvice)
+4. Data Access
+Spring Data JPA
+Configuring a database (H2, MySQL, PostgreSQL)
+@Entity and @Id annotations
+CRUD Repositories
+JPA Queries and Native Queries
+Relationships: One-to-One, One-to-Many, Many-to-Many
+5. Spring Boot Security
+Authentication and Authorization
+Spring Security Basics
+Custom UserDetailsService
+Role-based Access Control
+JWT (JSON Web Token) Integration
+6. Spring Boot Testing
+Unit Testing with JUnit and Mockito
+Testing REST APIs with MockMvc
+Integration Testing
+Using TestContainers for database testing
+7. Advanced Configuration
+Profiles in Spring Boot
+Externalizing configuration
+Environment Variables and Command-Line Arguments
+Logging with SLF4J and Logback
+8. Spring Boot Actuator
+Monitoring and metrics
+Exposing health and info endpoints
+Custom Actuator endpoints
+9. Asynchronous Programming
+Using @Async for background tasks
+Scheduling tasks with @Scheduled
+Thread Pool configuration
+10. Spring Boot with Messaging
+RabbitMQ and Kafka Basics
+Sending and consuming messages
+Configuration of message brokers
+11. Spring Boot with Cloud and Microservices
+Overview of microservices architecture
+Spring Cloud Config Server
+Service Discovery with Eureka
+Load balancing with Ribbon
+API Gateway with Spring Cloud Gateway
+Circuit Breaker with Resilience4j
+12. Performance Optimization
+Caching with Spring Boot (@Cacheable, EhCache, Redis)
+Connection Pooling
+Monitoring with Actuator and Prometheus/Grafana
+13. Deployment
+Building Spring Boot applications into JAR/WAR
+Deploying to Docker
+Deploying to cloud platforms (AWS, Azure, GCP)
+14. Advanced Topics
+Custom annotations
+Aspect-Oriented Programming (AOP)
+Internationalization (i18n)
+Understanding Spring Boot internals (e.g., auto-configuration)
