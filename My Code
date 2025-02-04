@@ -1,54 +1,52 @@
-I actively supported my team and platform buddy in resolving several bugs and conducting thorough testing to ensure a seamless user experience. I collaborated on debugging sessions, provided timely feedback during the testing phases, and worked on improving code quality. 
-The 1st paragraph is little advanced. Make it into simple tone:
+import React, { useState } from "react";
 
-This year marked a significant milestone as I embarked on my professional journey at Verizon India. My initial stint as an intern provided a deep dive into the company’s dynamic culture and organizational structure. Through consistent effort, I ensured timely completion of all assigned training modules, aligning with my learning objectives. I actively participated in hackathons, where I proposed innovative solutions, and engaged in leadership meetings, gaining exposure to high-level decision-making and building connections with senior stakeholders.
+export default function Guide() {
+  const [step, setStep] = useState(1);
+  const [selected, setSelected] = useState(null);
 
-During my internship, I acquired hands-on experience with several key technologies, including HTML, CSS, JavaScript, and React. I worked on developing various web features and successfully created a fully functional website using React and other frontend technologies. This project not only honed my technical skills but also deepened my understanding of web development best practices.
+  const handleFirstClick = (item) => {
+    setSelected(item);
+    setStep(2);
+  };
 
-After transitioning to a full-time role, I shifted to iOS development, a domain in which I had no prior experience. Despite this, I quickly adapted, mastering fundamental iOS concepts in a short span of time. I soon contributed to a critical project, developing a native search feature. This involved integrating search history and implementing a voice recognition functionality. I delivered this feature in two versions: one for a new page and another for an in-page search experience, showcasing my ability to handle diverse technical requirements efficiently.
+  const handleClearFilters = () => {
+    setSelected(null);
+    setStep(1);
+  };
 
-Beyond development, I actively engaged in broader team initiatives under MVA, contributing to pulse surveys, AHM meetings, and DTP calls. Additionally, I participated in Citizen Verizon activities, furthering community outreach, and joined events like the GUSTO Sports event. These experiences enriched my professional journey and fostered a stronger connection with my colleagues and the organization’s mission.
-
-
-
-Here are some best features of the Perplexity app and key takeaways for other apps like Verizon:
-
-*Best Features of Perplexity:*
-
-1. *Conversational AI*: Perplexity's AI-powered chat interface allows users to ask questions and receive answers in a conversational manner.
-2. *Knowledge Graph*: Perplexity's knowledge graph provides a vast repository of knowledge that the AI can draw upon to answer user queries.
-3. *Contextual Understanding*: The app's AI can understand the context of the user's question and provide relevant answers.
-4. *Multi-Turn Dialogues*: Perplexity allows users to engage in multi-turn dialogues, enabling more in-depth conversations.
-5. *Personalization*: The app can personalize responses based on the user's preferences and interests.
-
-*Key Takeaways for Other Apps like Verizon:*
-
-1. *Implement Conversational AI*: Integrate conversational AI to provide users with a more natural and intuitive way of interacting with the app.
-2. *Develop a Knowledge Graph*: Create a knowledge graph to provide a centralized repository of knowledge that the AI can draw upon.
-3. *Focus on Contextual Understanding*: Develop AI models that can understand the context of user queries to provide more accurate and relevant responses.
-4. *Enable Multi-Turn Dialogues*: Allow users to engage in multi-turn dialogues to facilitate more in-depth conversations.
-5. *Personalize Responses*: Use user data and preferences to personalize responses and provide a more tailored experience.
-6. *Use Natural Language Processing (NLP)*: Leverage NLP techniques to improve the app's ability to understand and respond to user queries.
-7. *Continuously Update and Refine the AI Model*: Regularly update and refine the AI model to ensure it remains accurate and effective.
-
-By incorporating these features and takeaways, apps like Verizon can create a more engaging, personalized, and effective user experience.
-
-1. Best Features:
-
-Summarization of Results
-Search results with source links
-Conversational (Copilot Mode)
-Text, PDF, and image uploads
-Voice mode
-Discover Page - Suggests trending topics and personalized recommendations based on user behavior.
-Search Filters - Customizable search filters for more precise results.
-
-2. Observations
-1. Clean, simple UI.
-2. Personalization - Search results and suggestions based on user interests and history.
-3. Updates information daily and remembers previous queries.
-4. Hybrid functionality between search engine and chatbot.
-5. Dual search modes - fast answers or in-depth responses.
-
-3. Tech Stack 
-Large Language Models (LLMs) & NLP
+  return (
+    <div className="container">
+      {step === 1 ? (
+        <div className="content">
+          <h2>What are you looking for?</h2>
+          <div className="button-group">
+            {["Apple", "Bat", "Cat", "Dog"].map((item) => (
+              <button key={item} className="btn" onClick={() => handleFirstClick(item)}>
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="content">
+          <h2>Thanks for coming</h2>
+          <div className="button-group">
+            {["A", "B", "C", "D"].map((item) => (
+              <button key={item} className="btn">
+                {item}
+              </button>
+            ))}
+          </div>
+          {selected && (
+            <div className="filter-bar">
+              <span className="selected-item">
+                {selected} <span className="close" onClick={handleClearFilters}>x</span>
+              </span>
+              <span className="clear" onClick={handleClearFilters}>Clear Filters</span>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
