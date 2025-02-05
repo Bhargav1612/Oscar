@@ -1,3 +1,103 @@
+<div className="guided-container">
+  <style>
+    {`
+    .guided-container {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      margin-top: 50px;
+    }
+
+    .button-group {
+      margin-top: 20px;
+    }
+
+    .guide-button {
+      border: 2px solid black;
+      background: white;
+      color: black;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .guide-button.selected {
+      background: black;
+      color: white;
+    }
+
+    .filter-section {
+      margin-top: 20px;
+    }
+
+    .selected-filter {
+      border: 2px solid gray;
+      color: gray;
+      padding: 5px 10px;
+      font-size: 14px;
+      display: inline-block;
+      margin-right: 10px;
+      position: relative;
+    }
+
+    .remove {
+      cursor: pointer;
+      margin-left: 8px;
+      color: red;
+    }
+
+    .clear-filters {
+      text-decoration: underline;
+      cursor: pointer;
+      color: blue;
+    }
+    `}
+  </style>
+
+  {step === 1 ? (
+    <>
+      <h2>What are you looking for?</h2>
+      <div className="button-group">
+        {["Apple", "Bat", "Cat", "Dog"].map((item) => (
+          <button
+            key={item}
+            className={`guide-button ${selected === item ? "selected" : ""}`}
+            onClick={() => handleFirstClick(item)}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+    </>
+  ) : (
+    <>
+      <h2>Thanks for coming</h2>
+      <div className="button-group">
+        {["A", "B", "C", "D"].map((item) => (
+          <button key={item} className="guide-button">
+            {item}
+          </button>
+        ))}
+      </div>
+      {selected && (
+        <div className="filter-section">
+          <span className="selected-filter">
+            {selected} <span className="remove" onClick={handleClear}>✖</span>
+          </span>
+          <span className="clear-filters" onClick={handleClear}>
+            Clear Filters
+          </span>
+        </div>
+      )}
+    </>
+  )}
+</div>
+
+
+
+
+
 import React, { useState } from "react";
 import "./App.css";
 import Guide from "./Guide";
