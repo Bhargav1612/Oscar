@@ -1,127 +1,65 @@
-import React, { useState } from "react";
+<div className="guided-container">
+  <style>
+    {`
+    .guided-container {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      margin-top: 50px;
+    }
 
-export default function Guide() {
-  const [step, setStep] = useState(1);
-  const [selected, setSelected] = useState(null);
-  const [tempSelected, setTempSelected] = useState(null); // Temp state for 2-sec color change
+    .button-group {
+      margin-top: 20px;
+    }
 
-  const handleFirstClick = (item) => {
-    setTempSelected(item); // Highlight button
-    setTimeout(() => {
-      setSelected(item);
-      setStep(2); // Move to Step 2
-      setTempSelected(null);
-    }, 2000);
-  };
+    .guide-button {
+      border: 2px solid black;
+      background: white;
+      color: black;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
 
-  const handleClear = () => {
-    setSelected(null);
-    setStep(1);
-  };
+    .guide-button.selected {
+      background: black;
+      color: white;
+    }
+    `}
+  </style>
 
-  return (
-    <div className="guided-container">
-      <style>
-        {`
-        .guided-container {
-          text-align: center;
-          font-family: Arial, sans-serif;
-          margin-top: 50px;
-        }
-
-        .button-group {
-          margin-top: 20px;
-        }
-
-        .guide-button {
-          border: 2px solid black;
-          background: white;
-          color: black;
-          padding: 10px 20px;
-          margin: 5px;
-          font-size: 16px;
-          cursor: pointer;
-          transition: background 0.3s ease;
-        }
-
-        .guide-button.temp-selected {
-          background: black;
-          color: white;
-        }
-
-        .filter-section {
-          margin-top: 20px;
-        }
-
-        .selected-filter {
-          border: 2px solid gray;
-          color: gray;
-          padding: 5px 10px;
-          font-size: 14px;
-          display: inline-block;
-          margin-right: 10px;
-          position: relative;
-        }
-
-        .remove {
-          cursor: pointer;
-          margin-left: 8px;
-          color: red;
-        }
-
-        .clear-filters {
-          text-decoration: underline;
-          cursor: pointer;
-          color: blue;
-        }
-        `}
-      </style>
-
-      {/* Step 1 */}
-      {step === 1 && (
-        <div className="step1-container">
-          <h2>What are you looking for?</h2>
-          <div className="button-group">
-            {["Apple", "Bat", "Cat", "Dog"].map((item) => (
-              <button
-                key={item}
-                className={`guide-button ${tempSelected === item ? "temp-selected" : ""}`}
-                onClick={() => handleFirstClick(item)}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Step 2 */}
-      {step === 2 && (
-        <div className="step2-container">
-          <h2>Thanks for coming</h2>
-          <div className="button-group">
-            {["A", "B", "C", "D"].map((item) => (
-              <button key={item} className="guide-button">
-                {item}
-              </button>
-            ))}
-          </div>
-          {selected && (
-            <div className="filter-section">
-              <span className="selected-filter">
-                {selected} <span className="remove" onClick={handleClear}>✖</span>
-              </span>
-              <span className="clear-filters" onClick={handleClear}>
-                Clear Filters
-              </span>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
+  {step === 1 ? (
+    <>
+      <h2>What are you looking for?</h2>
+      <div className="button-group">
+        {["Apple", "Bat", "Cat", "Dog"].map((item) => (
+          <button
+            key={item}
+            className={`guide-button ${selected === item ? "selected" : ""}`}
+            onClick={() => {
+              setSelected(item);
+              setTimeout(() => setStep(2), 2000);
+            }}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+    </>
+  ) : (
+    <>
+      <h2>Thanks for coming</h2>
+      <div className="button-group">
+        {["A", "B", "C", "D"].map((item) => (
+          <button key={item} className="guide-button">
+            {item}
+          </button>
+        ))}
+      </div>
+    </>
+  )}
+</div>
 
 
 
