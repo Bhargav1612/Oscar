@@ -1,78 +1,69 @@
-import React from "react";
+      import React from "react";
 import styled from "styled-components";
+import { TitleLockup } from "@vds/type-lockups";
+import { TileContainer } from "@vds/tiles";
 import { Carousel } from "@vds/carousels";
 
-// Wrapper for the entire section
-const TemplateWrapper = styled.div`
+// Wrapper for the carousel
+const Wrapper = styled.div`
+  background: #f6f6f6;
+  padding-top: 10px;
   width: 100%;
-  padding: 20px;
+  height: 100%;
   box-sizing: border-box;
-  background: ${(props) => (props.$surface === "dark" ? "#131313" : "#f6f6f6")};
-`;
-
-// Title Section
-const TitleSection = styled.div`
-  text-align: center;
-  margin-bottom: 20px;
+  overflow-y: auto;
 `;
 
 // Tile Wrapper
 const TileWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 16px;
-  border-radius: 8px;
-  background: white;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-`;
-
-// Image & Button Section
-const ImageButtonSection = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
 `;
 
-// Button
-const BuyButton = styled.button`
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+// Section for Image
+const TileSectionWrapper = styled.div`
+  display: flex;
+  align-self: center;
+  text-align: center;
+  margin-top: auto;
+  padding-top: 12px;
+  overflow: hidden;
+  max-width: 100%;
 
-  &:hover {
-    background-color: #0056b3;
+  img {
+    max-height: 100%;
+    max-width: 100%;
   }
 `;
 
-// Image Styling
-const ProductImage = styled.img`
-  width: 80px;
-  height: auto;
-  margin-left: 10px;
-`;
+// Tile Component
+const Tile = (props) => (
+  <TileContainer {...props} padding="24px">
+    <TileWrapper>
+      <TitleLockup
+        surface="light"
+        width="100%"
+        data={{
+          title: { size: "titleLarge", primitive: "h2", children: props.productname },
+          subtitle: { size: "bodyMedium", primitive: "h3", children: `Price: $${props.amount}` },
+        }}
+      />
+      <TileSectionWrapper>
+        {props.imageurl && <img alt={props.productname} src={props.imageurl} />}
+      </TileSectionWrapper>
+    </TileWrapper>
+  </TileContainer>
+);
 
-const MyClickTemplate = ({ reccomendDevices }) => {
+// Carousel Component
+const TileCarousel = ({ recommendedDevices }) => {
   return (
-    <TemplateWrapper>
-      {/* Title Section */}
-      <TitleSection>
-        <h1>Recommended Devices</h1>
-      </TitleSection>
-
-      {/* Carousel Section */}
+    <Wrapper>
       <Carousel
         layout="3UP"
         gutter="24px"
         peek="standard"
-        surface="light"
         paginationInset="12px"
         aspectRatio="2:3"
         viewportOverride={{
@@ -82,34 +73,71 @@ const MyClickTemplate = ({ reccomendDevices }) => {
           tabletLarge: { layout: "3UP" },
           desktop: { layout: "3UP" },
         }}
-        pagination={{ kind: "lowContrast", hideBorder: true }}
+        pagination={{
+          kind: "lowContrast",
+          hideBorder: true,
+        }}
         floating
         paginationDisplay="onHover"
-        data={reccomendDevices.map((device, index) => ({
-          id: `tile-${index}`,
-          title: device.productname,
-          subtitle1: `Brand: ${device.currentbrand}`,
-          subtitle2: `Price: ${device.amount}`,
-          subtitle3: "Limited Offer!",
-          img: device.imageurl,
-        }))}
-        renderItem={(item) => (
-          <TileWrapper key={item.id}>
-            <h2>{item.title}</h2>
-            <h3>{item.subtitle1}</h3>
-            <h3>{item.subtitle2}</h3>
-            <h3>{item.subtitle3}</h3>
-
-            {/* Image & Button Section */}
-            <ImageButtonSection>
-              <BuyButton onClick={() => alert(`Buying ${item.title}`)}>Buy Now</BuyButton>
-              <ProductImage src={item.img} alt={item.title} />
-            </ImageButtonSection>
-          </TileWrapper>
-        )}
+        data={recommendedDevices} // Pass the dynamic data
+        renderItem={(item) => <Tile key={item.productname} {...item} />}
       />
-    </TemplateWrapper>
+    </Wrapper>
   );
 };
 
-export default MyClickTemplate;
+export default TileCarousel;
+
+import React from 'react';
+import { Body, Title } from '@vxx/buttons';
+import styled from 'styled-components';
+import { domainurl } from '../../helper';
+import { formImageurl } from '../auto/utils';
+import TileCarousel from './TileCarousel'; // Import the carousel component
+
+const OuterDiv = styled.div`
+  padding: 16px 24px;
+  border: 1px 0px 1px 0px;
+  display: flex;
+  justify-content: space-between;
+
+  & .update-title {
+    padding: 16px 0px 10px 0px;
+  } 
+
+  @media (max-width: 768px) {
+    & .myClick-update-img {
+      display: none;
+    }
+  }
+`;
+
+const myClickABC = (props) => {
+  const { mtn, productname, currentbrand, amount, reccomendDevices } = props;
+
+  return (
+    <OuterDiv>
+      <div>
+        <div className="update-container">
+          <div className="update-title">
+            <Title size="large" bold>
+              Update to {productname}
+            </Title>
+          </div>
+          {mtn && (
+            <Body size="large" color="#000000">
+              Hi here you can use ${amount} for {currentbrand} for {mtn.slice(0, 3)}-{mtn.slice(3, 6)}-{mtn.slice(6)}
+            </Body>
+          )}
+        </div>
+
+        {/* Replace Button with the Carousel */}
+        <TileCarousel recommendedDevices={reccomendDevices} />
+      </div>
+    </OuterDiv>
+  );
+};
+
+export default myClickABC;
+
+
