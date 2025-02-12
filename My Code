@@ -1,143 +1,56 @@
-      import React from "react";
-import styled from "styled-components";
+Here's the consolidated code in a single file:
+
+```
+jsx
+import React from 'react';
+import { Carousel } from "@vds/carousels";
 import { TitleLockup } from "@vds/type-lockups";
 import { TileContainer } from "@vds/tiles";
-import { Carousel } from "@vds/carousels";
+import { ButtonGroup } from "@vds/buttons";
 
-// Wrapper for the carousel
-const Wrapper = styled.div`
-  background: #f6f6f6;
-  padding-top: 10px;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  overflow-y: auto;
-`;
+const data = [
+  {
+    id: "tileOne",
+    title: "Get double the storage on us",
+    subtitle: "Get 512GB for the price of the 256GB when you tooltip: { ariaLabel: \"more information for Get double the storag containerId: \"tileOne\", children: I \"Up to $2,019.99 (512 GB only) device payment or full ",
+    img: {
+      src: "https://via.placeholder.com/300"
+    },
+    buttonData: [
+      {
+        label: 'Button 1',
+        onClick: () => alert('Button 1 clicked')
+      },
+      {
+        label: 'Button 2',
+        onClick: () => alert('Button 2 clicked')
+      }
+    ]
+  },
+  // Add more data items here...
+];
 
-// Tile Wrapper
-const TileWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-// Section for Image
-const TileSectionWrapper = styled.div`
-  display: flex;
-  align-self: center;
-  text-align: center;
-  margin-top: auto;
-  padding-top: 12px;
-  overflow: hidden;
-  max-width: 100%;
-
-  img {
-    max-height: 100%;
-    max-width: 100%;
-  }
-`;
-
-// Tile Component
 const Tile = (props) => (
-  <TileContainer {...props} padding="24px">
-    <TileWrapper>
-      <TitleLockup
-        surface="light"
-        width="100%"
-        data={{
-          title: { size: "titleLarge", primitive: "h2", children: props.productname },
-          subtitle: { size: "bodyMedium", primitive: "h3", children: `Price: $${props.amount}` },
-        }}
-      />
-      <TileSectionWrapper>
-        {props.imageurl && <img alt={props.productname} src={props.imageurl} />}
-      </TileSectionWrapper>
-    </TileWrapper>
+  <TileContainer padding="24px">
+    <TitleLockup surface="light" width="100%" data={{ title: props.title, subtitle: props.subtitle }} />
+    {props.img && <img alt={props.title} {...props.img} />}
+    {props.buttonData && <ButtonGroup data={props.buttonData} />}
   </TileContainer>
 );
 
-// Carousel Component
-const TileCarousel = ({ recommendedDevices }) => {
+const CarouselCode = () => {
   return (
-    <Wrapper>
-      <Carousel
-        layout="3UP"
-        gutter="24px"
-        peek="standard"
-        paginationInset="12px"
-        aspectRatio="2:3"
-        viewportOverride={{
-          mobile: { layout: "1UP" },
-          mobileLarge: { layout: "2UP" },
-          tablet: { layout: "3UP" },
-          tabletLarge: { layout: "3UP" },
-          desktop: { layout: "3UP" },
-        }}
-        pagination={{
-          kind: "lowContrast",
-          hideBorder: true,
-        }}
-        floating
-        paginationDisplay="onHover"
-        data={recommendedDevices} // Pass the dynamic data
-        renderItem={(item) => <Tile key={item.productname} {...item} />}
-      />
-    </Wrapper>
+    <Carousel 
+      layout="3UP" 
+      gutter="24px" 
+      peek="standard" 
+      paginationInset="12px" 
+      aspectRatio="2:3" 
+      data={data} 
+      renderItem={(item) => <Tile {...item} />} 
+    />
   );
 };
 
-export default TileCarousel;
-
-import React from 'react';
-import { Body, Title } from '@vxx/buttons';
-import styled from 'styled-components';
-import { domainurl } from '../../helper';
-import { formImageurl } from '../auto/utils';
-import TileCarousel from './TileCarousel'; // Import the carousel component
-
-const OuterDiv = styled.div`
-  padding: 16px 24px;
-  border: 1px 0px 1px 0px;
-  display: flex;
-  justify-content: space-between;
-
-  & .update-title {
-    padding: 16px 0px 10px 0px;
-  } 
-
-  @media (max-width: 768px) {
-    & .myClick-update-img {
-      display: none;
-    }
-  }
-`;
-
-const myClickABC = (props) => {
-  const { mtn, productname, currentbrand, amount, reccomendDevices } = props;
-
-  return (
-    <OuterDiv>
-      <div>
-        <div className="update-container">
-          <div className="update-title">
-            <Title size="large" bold>
-              Update to {productname}
-            </Title>
-          </div>
-          {mtn && (
-            <Body size="large" color="#000000">
-              Hi here you can use ${amount} for {currentbrand} for {mtn.slice(0, 3)}-{mtn.slice(3, 6)}-{mtn.slice(6)}
-            </Body>
-          )}
-        </div>
-
-        {/* Replace Button with the Carousel */}
-        <TileCarousel recommendedDevices={reccomendDevices} />
-      </div>
-    </OuterDiv>
-  );
-};
-
-export default myClickABC;
-
-
+export default CarouselCode;
+```
