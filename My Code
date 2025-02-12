@@ -1,3 +1,123 @@
+import React from "react";
+import styled from "styled-components";
+import { TitleLockup } from "@vds/type-lockups";
+import { TileContainer } from "@vds/tiles";
+import { ButtonGroup } from "@vds/buttons";
+import { Carousel } from "@vds/carousels";
+
+// Wrapper Styles
+const Wrapper = styled.div`
+  background: ${(props) => (props.$surface === "dark" ? "#131313" : "#f6f6f6")};
+  padding-top: 10px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+`;
+
+const TileWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const TileSectionWrapper = styled.div`
+  display: flex;
+  align-self: center;
+  text-align: center;
+  text-align: -webkit-center;
+  margin-top: auto;
+  padding-top: 12px;
+  overflow: hidden;
+  max-width: 100%;
+
+  img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+`;
+
+// Sample Tile Data
+const data = [
+  {
+    id: "tileOne",
+    title: {
+      size: "titleLarge",
+      primitive: "h2",
+      children: "Get double the storage on us",
+    },
+    subtitle: {
+      size: "bodyMedium",
+      primitive: "h3",
+      children: "Get 512GB for the price of the 256GB when you...",
+    },
+    tooltip: {
+      ariaLabel: "More information for Get double the storage",
+      containerId: "tileOne",
+      children: "Up to $2.99 (52 GB only) device payment or full price.",
+    },
+    img: {
+      src: "https://sghaha/slide1",
+    },
+    backgroundColor: "white",
+    showBorder: true,
+    onClick: () => alert("You clicked on the Tile Container."),
+    ariaLabel: "Get double the storage on us",
+  },
+];
+
+// Tile Component
+const Tile = (props) => (
+  <TileContainer {...props} padding={props.viewport === "mobile" ? "12px" : "24px"}>
+    <TileWrapper>
+      <TitleLockup
+        surface="light"
+        width="100%"
+        data={{ title: props.title, subtitle: props.subtitle }}
+      />
+      <TileSectionWrapper>
+        {props.img && <img alt={props.title.children} src={props.img.src} />}
+        {props.buttonData && <ButtonGroup data={props.buttonData} />}
+      </TileSectionWrapper>
+    </TileWrapper>
+  </TileContainer>
+);
+
+// Carousel Component
+const TileCarousel = ({ surface }) => {
+  return (
+    <Wrapper $surface={surface}>
+      <Carousel
+        layout="3UP"
+        gutter="24px"
+        peek="standard"
+        surface={surface}
+        paginationInset="12px"
+        aspectRatio="2:3"
+        viewportOverride={{
+          mobile: { layout: "1UP" },
+          mobileLarge: { layout: "2UP" },
+          tablet: { layout: "3UP" },
+          tabletLarge: { layout: "3UP" },
+          desktop: { layout: "3UP" },
+        }}
+        pagination={{
+          kind: "lowContrast",
+          hideBorder: true,
+        }}
+        floating
+        paginationDisplay="onHover"
+        data={data}
+        renderItem={(item) => <Tile key={item.id} {...item} />}
+      />
+    </Wrapper>
+  );
+};
+
+export default TileCarousel;
+
+
+
 import React from 'react';
 import { Body, Title } from '@vxx/buttons';
 import styled from 'styled-components';
