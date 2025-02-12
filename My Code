@@ -1,56 +1,175 @@
-Here's the consolidated code in a single file:
-
-```
-jsx
 import React from 'react';
-import { Carousel } from "@vds/carousels";
-import { TitleLockup } from "@vds/type-lockups";
-import { TileContainer } from "@vds/tiles";
-import { ButtonGroup } from "@vds/buttons";
+import { Body, Title } from '@vxx/buttons';
+import styled from 'styled-components';
+import { domainurl } from '../../helper';
+import { formImageurl } from '../auto/utils';
+import { Carousel } from "@vds/carousels"; // Assuming you have this import for the Carousel component
 
-const data = [
-  {
-    id: "tileOne",
-    title: "Get double the storage on us",
-    subtitle: "Get 512GB for the price of the 256GB when you tooltip: { ariaLabel: \"more information for Get double the storag containerId: \"tileOne\", children: I \"Up to $2,019.99 (512 GB only) device payment or full ",
-    img: {
-      src: "https://via.placeholder.com/300"
-    },
-    buttonData: [
-      {
-        label: 'Button 1',
-        onClick: () => alert('Button 1 clicked')
+const OuterDiv = styled.div`
+  padding: 16px 24px;
+  border: 1px 0px 1px 0px;
+  display: flex;
+  justify-content: space-between;
+
+  & .update-title {
+    padding: 16px 0px 10px 0px;
+  }
+
+  & .update-button {
+    padding: 1.2rem 0 1.2rem 0;
+  }
+
+  & .myClick-update-img {
+    height: 172px;
+  }
+
+  @media (max-width: 768px) {
+    & .myClick-update-img {
+      display: none;
+    }
+  }
+`;
+
+const myClickABC = (props) => {
+  const { mtn, imageurl, productname, currentname, currentbrand, amount } = props;
+  const buttonname = "Update";
+  const handleClick = () => {
+    window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4,)}&entrypoint=SRCH`;
+  };
+  const url = formImageurl(imageurl, 'light');
+
+  const data = [
+    {
+      eyebrow: {
+        size: "bodyLarge",
+        children: "first"
       },
-      {
-        label: 'Button 2',
-        onClick: () => alert('Button 2 clicked')
-      }
-    ]
-  },
-  // Add more data items here...
-];
+      title: {
+        size: "titleSmall",
+        primitive: 'h1',
+        children: "second"
+      },
+      badge: {
+        children: "third"
+      },
+      subtitle: {
+        size: "titleSmall",
+        primitive: 'h1',
+        children: "fourth"
+      },
+      img: {
+        src: url,
+      },
+      buttonData: [
+        {
+          children: "Click",
+          size: "large",
+          use: "secondary",
+          onClick: () => alert("Button clicked"),
+        }
+      ],
+      ariaLabel: "tile label"
+    },
+    // Add more data items here...
+  ];
 
-const Tile = (props) => (
-  <TileContainer padding="24px">
-    <TitleLockup surface="light" width="100%" data={{ title: props.title, subtitle: props.subtitle }} />
-    {props.img && <img alt={props.title} {...props.img} />}
-    {props.buttonData && <ButtonGroup data={props.buttonData} />}
-  </TileContainer>
-);
-
-const CarouselCode = () => {
   return (
-    <Carousel 
-      layout="3UP" 
-      gutter="24px" 
-      peek="standard" 
-      paginationInset="12px" 
-      aspectRatio="2:3" 
-      data={data} 
-      renderItem={(item) => <Tile {...item} />} 
-    />
+    <OuterDiv>
+      <div>
+        <div className="update-container">
+          <div className="update-title">
+            <Title size="large" bold>
+              Update to {productname}
+            </Title>
+          </div>
+          {mtn && (
+            <Body size="large" color="#000000">
+              Hi here you can use ${amount} for {currentbrand} for {mtn.slice(0, 3)}-{mtn.slice(3, 6)}-{mtn.slice(6)}
+            </Body>
+          )}
+        </div>
+
+        {/* Carousel Component */}
+        <div className="carousel">
+          <Carousel
+            peek="standard"
+            layout="3UP"
+            gutter="24px"
+            surface="light"
+            paginationInset="12px"
+            paginationDisplay="onHover"
+            data={data}
+            renderItem={({ eyebrow, title, badge, subtitle, img, buttonData, id, ariaLabel }) => (
+              <div
+                key={id}
+                aria-label={ariaLabel}
+                style={{
+                  backgroundColor: 'white',
+                  height: '300px',
+                  width: '100%',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  boxSizing: 'border-box',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+              >
+                {/* Eyebrow Text */}
+                <div style={{ color: 'grey', fontSize: '14px' }}>{eyebrow.children}</div>
+
+                {/* Badge (Red fill, white text) */}
+                <div
+                  style={{
+                    backgroundColor: 'red',
+                    color: 'white',
+                    padding: '4px 8px',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                    alignSelf: 'flex-start'
+                  }}
+                >
+                  {badge.children}
+                </div>
+
+                {/* Title (Bold text) */}
+                <div style={{ fontWeight: 'bold', fontSize: '18px' }}>{title.children}</div>
+
+                {/* Subtitle */}
+                <div style={{ fontSize: '14px', color: 'grey' }}>{subtitle.children}</div>
+
+                {/* Image */}
+                {img && <img alt={title.children} src={img.src} style={{ width: '100%', height: 'auto', borderRadius: '8px', marginTop: '8px' }} />}
+
+                {/* Button Group */}
+                {buttonData && (
+                  <div>
+                    {buttonData.map((button, index) => (
+                      <button
+                        key={index}
+                        onClick={button.onClick}
+                        style={{
+                          padding: '8px 16px',
+                          fontSize: '14px',
+                          marginTop: '8px',
+                          backgroundColor: button.use === "secondary" ? 'gray' : 'blue',
+                          color: 'white',
+                          borderRadius: '4px',
+                        }}
+                      >
+                        {button.children}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          />
+        </div>
+      </div>
+    </OuterDiv>
   );
 };
 
-export default CarouselCode;
-```
+export default myClickABC;
