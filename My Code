@@ -3,7 +3,11 @@ import { Body, Title, Button } from '@vxx/buttons';
 import styled from 'styled-components';
 import { domainurl } from '../../helper';
 import { formImageurl } from '../auto/utils';
-import Carousel from '@vxx/carousel';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Pagination, Scrollbar } from 'swiper/modules';
 
 const OuterDiv = styled.div`
   padding: 16px 24px;
@@ -11,39 +15,52 @@ const OuterDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-`;
 
-const Tile = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  border-radius: 12px;
-  padding: 16px;
-  height: 200px;
-  width: 100%;
-`;
+  .update-title {
+    font-weight: bold;
+  }
 
-const TileContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
+  .swiper-container {
+    width: 100%;
+  }
 
-const GreyText = styled.span`
-  color: grey;
-`;
+  .tile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px;
+    height: 200px;
+    width: 100%;
+  }
 
-const HighlightedText = styled.span`
-  background-color: red;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-`;
+  .tile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-const BoldName = styled(Title)`
-  font-size: 20px;
-  font-weight: bold;
+  .grey-text {
+    color: grey;
+  }
+
+  .highlighted-text {
+    background-color: red;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .bold-name {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .tile img {
+    height: 100%;
+    border-radius: 12px;
+  }
 `;
 
 const myClickABC = (props) => {
@@ -65,33 +82,34 @@ const myClickABC = (props) => {
           Hi, you can use ${amount} for {currentbrand} for {mtn.slice(0,3)}-{mtn.slice(3,6)}-{mtn.slice(6)}
         </Body>
       )}
-      <Carousel
-        peek="standard"
-        layout="3UP"
-        gutter="20px"
-        surface="light"
-        paginationInset="12px"
-        paginationDisplay="onHover"
-        data={props.reccomendDevices.map((device) => ({ onClick: handleClick }))}
-        renderItem={(device) => (
-          <Tile>
-            <TileContent>
-              <GreyText>{device.currentbrand}</GreyText>
-              <HighlightedText>Exclusive Offer</HighlightedText>
-              <BoldName>{device.productname}</BoldName>
-              <GreyText>{device.mtn}</GreyText>
-              <Button size="large" use="primary" onClick={handleClick}>
-                {buttonName}
-              </Button>
-            </TileContent>
-            <img
-              src={formImageurl(device.imageurl, 'light')}
-              alt={device.productname}
-              style={{ height: '100%', borderRadius: '12px' }}
-            />
-          </Tile>
-        )}
-      />
+      <Swiper
+        modules={[Pagination, Scrollbar]}
+        spaceBetween={20}
+        slidesPerView={3}
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        className="swiper-container"
+      >
+        {props.reccomendDevices.map((device, index) => (
+          <SwiperSlide key={index}>
+            <div className="tile">
+              <div className="tile-content">
+                <span className="grey-text">{device.currentbrand}</span>
+                <span className="highlighted-text">Exclusive Offer</span>
+                <Title className="bold-name">{device.productname}</Title>
+                <span className="grey-text">{device.mtn}</span>
+                <Button size="large" use="primary" onClick={handleClick}>
+                  {buttonName}
+                </Button>
+              </div>
+              <img
+                src={formImageurl(device.imageurl, 'light')}
+                alt={device.productname}
+              />
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </OuterDiv>
   );
 };
