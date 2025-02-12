@@ -1,3 +1,5 @@
+{(props.reccomendDevices?.length ? props.reccomendDevices : mockDevices.recommendedDevices).map((device, index) => (
+
 import React from 'react';
 import { Body, Title, Button } from '@vxx/buttons';
 import styled from 'styled-components';
@@ -7,68 +9,78 @@ import useEmblaCarousel from 'embla-carousel-react';
 
 const OuterDiv = styled.div`
   padding: 16px 24px;
-  border: 1px solid #ccc;
+  border: 1px 0px 1px 0px;
   display: flex;
   flex-direction: column;
 
   .carousel-container {
     overflow: hidden;
-    width: 100%;
+    margin-top: 10px;
   }
 
-  .carousel-slide {
+  .embla {
     display: flex;
   }
 
-  .tile {
+  .embla__slide {
     display: flex;
-    flex-direction: row;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     background-color: white;
     height: 200px;
     width: 100%;
     border-radius: 12px;
     padding: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  .tile-left {
+  .tile-content {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
 
-  .tile-right img {
-    height: 100px;
-    width: auto;
-    border-radius: 8px;
+  .tile-image {
+    height: 100%;
+    max-width: 40%;
+    object-fit: cover;
+    border-radius: 12px;
   }
 `;
 
-const myClickABC = ({ reccomendDevices }) => {
-  const [emblaRef] = useEmblaCarousel();
-
-  const handleClick = (reccomendUrl, processMtn) => {
-    window.location.href = `${domainurl(window.location.hostname)}/${reccomendUrl}?intent=EUP&nHash=${processMtn.slice(-4)}&entrypoint=SRCH`;
+const myClickABC = (props) => {
+  const { mtn, imageurl, productname, currentname, currentbrand, amount } = props;
+  const buttonname = "Update";
+  const handleClick = () => {
+    window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4)}&entrypoint=SRCH`;
   };
+
+  const [emblaRef] = useEmblaCarousel();
 
   return (
     <OuterDiv>
+      <div className="update-container">
+        <div className="update-title">
+          <Title size="large" bold>
+            Update to {productname}
+          </Title>
+        </div>
+        {mtn && (
+          <Body size="large" color="#000000">
+            Hi here u can use ${amount} for ${currentbrand} for {mtn.slice(0, 3)}-{mtn.slice(3, 6)}-{mtn.slice(6)}
+          </Body>
+        )}
+      </div>
       <div className="carousel-container" ref={emblaRef}>
-        <div className="carousel-slide">
-          {reccomendDevices.map((device, index) => (
-            <div key={index} className="tile">
-              <div className="tile-left">
-                <Title size="large" bold>Update to {device.productname}</Title>
-                <Body size="large" color="#000">Brand: {device.currentbrand}</Body>
-                <Body size="large" color="#000">Price: ${device.amount}</Body>
-                <Body size="large" color="#000">Model: {device.currentname}</Body>
-                <Button size="large" use="primary" onClick={() => handleClick(device.reccomendUrl, device.processMtn)}>Update</Button>
+        <div className="embla">
+          {props.reccomendDevices?.map((device, index) => (
+            <div key={index} className="embla__slide">
+              <div className="tile-content">
+                <Title size="medium" bold>{device.productname}</Title>
+                <Body size="small">Brand: {device.currentbrand}</Body>
+                <Body size="small">Amount: ${device.amount}</Body>
+                <Button size="large" disabled={false} use="primary" data-customname={`my_click:${buttonname}`} onClick={handleClick}>Update</Button>
               </div>
-              <div className="tile-right">
-                <img src={formImageurl(device.imageurl, 'light')} alt={device.productname} />
-              </div>
+              <img className="tile-image" src={formImageurl(device.imageurl, 'light')} alt={device.productname} />
             </div>
           ))}
         </div>
@@ -78,6 +90,8 @@ const myClickABC = ({ reccomendDevices }) => {
 };
 
 export default myClickABC;
+
+
 
 
 
