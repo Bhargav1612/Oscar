@@ -1,98 +1,83 @@
-{(props.reccomendDevices?.length ? props.reccomendDevices : mockDevices.recommendedDevices).map((device, index) => (
-
 import React from 'react';
-import { Body, Title, Button } from '@vxx/buttons';
+import { Body, Title } from '@vxx/buttons';
 import styled from 'styled-components';
 import { domainurl } from '../../helper';
 import { formImageurl } from '../auto/utils';
-import useEmblaCarousel from 'embla-carousel-react';
 
 const OuterDiv = styled.div`
   padding: 16px 24px;
-  border: 1px 0px 1px 0px;
+  border: 1px solid #ccc;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 
-  .carousel-container {
-    overflow: hidden;
-    margin-top: 10px;
+  & .update-title {
+    padding: 16px 0px 10px 0px;
   }
 
-  .embla {
+  & .tile-container {
     display: flex;
-  }
-
-  .embla__slide {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    background-color: white;
-    height: 200px;
-    width: 100%;
-    border-radius: 12px;
-    padding: 16px;
+    gap: 10px;
   }
 
-  .tile-content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  & .nav-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
   }
 
-  .tile-image {
-    height: 100%;
-    max-width: 40%;
-    object-fit: cover;
-    border-radius: 12px;
+  & .update-img {
+    height: 172px;
+    max-width: 100px;
+  }
+
+  @media (max-width: 768px) {
+    & .update-img {
+      display: none;
+    }
   }
 `;
 
 const myClickABC = (props) => {
-  const { mtn, imageurl, productname, currentname, currentbrand, amount } = props;
-  const buttonname = "Update";
+  const { mtn, imageurl, productname, currentbrand, amount } = props;
   const handleClick = () => {
     window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4)}&entrypoint=SRCH`;
   };
-
-  const [emblaRef] = useEmblaCarousel();
+  const url = formImageurl(imageurl, 'light');
 
   return (
     <OuterDiv>
-      <div className="update-container">
-        <div className="update-title">
-          <Title size="large" bold>
-            Update to {productname}
-          </Title>
-        </div>
-        {mtn && (
-          <Body size="large" color="#000000">
-            Hi here u can use ${amount} for ${currentbrand} for {mtn.slice(0, 3)}-{mtn.slice(3, 6)}-{mtn.slice(6)}
-          </Body>
-        )}
-      </div>
-      <div className="carousel-container" ref={emblaRef}>
-        <div className="embla">
-          {props.reccomendDevices?.map((device, index) => (
-            <div key={index} className="embla__slide">
-              <div className="tile-content">
-                <Title size="medium" bold>{device.productname}</Title>
-                <Body size="small">Brand: {device.currentbrand}</Body>
-                <Body size="small">Amount: ${device.amount}</Body>
-                <Button size="large" disabled={false} use="primary" data-customname={`my_click:${buttonname}`} onClick={handleClick}>Update</Button>
-              </div>
-              <img className="tile-image" src={formImageurl(device.imageurl, 'light')} alt={device.productname} />
-            </div>
-          ))}
+      <div>
+        <div className="update-container">
+          <div className="update-title">
+            <Title size="large" bold>
+              Update to {productname}
+            </Title>
+          </div>
+          {mtn && (
+            <Body size="large" color="#000000">
+              Hi here u can use ${amount} for {currentbrand} for {mtn.slice(0, 3)}-{mtn.slice(3, 6)}-{mtn.slice(6)}
+            </Body>
+          )}
         </div>
       </div>
+      {imageurl && (
+        <div className="tile-container">
+          <button className="nav-button" onClick={handleClick}>{'<'}</button>
+          <img className="update-img" src={url} alt={productname} />
+          <button className="nav-button" onClick={handleClick}>{'>'}</button>
+        </div>
+      )}
     </OuterDiv>
   );
 };
 
 export default myClickABC;
-
-
-
 
 
 
