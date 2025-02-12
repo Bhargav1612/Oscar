@@ -1,68 +1,101 @@
-<div className="guided-container">
-  <style>
-    {`
-    .guided-container {
-      text-align: center;
-      font-family: Arial, sans-serif;
-      margin-top: 50px;
-    }
+import React from 'react';
+import { Body, Title, Button } from '@vxx/buttons';
+import styled from 'styled-components';
+import { domainurl } from '../../helper';
+import { formImageurl } from '../auto/utils';
+import Carousel from '@vxx/carousel';
 
-    .button-group {
-      margin-top: 20px;
-    }
+const OuterDiv = styled.div`
+  padding: 16px 24px;
+  border: 1px 0px 1px 0px;
+  display: flex;
+  flex-direction: column;
 
-    .guide-button {
-      border: 2px solid black;
-      background: white;
-      color: black;
-      padding: 10px 20px;
-      margin: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
+  & .update-title {
+    padding: 16px 0px 10px 0px;
+  } 
+`;
 
-    .guide-button.selected {
-      background: black;
-      color: white;
-    }
-    `}
-  </style>
+const Tile = styled.div`
+  display: flex;
+  background-color: white;
+  height: 200px;
+  width: 100%;
+  border-radius: 12px;
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
 
-  {step === 1 ? (
-    <>
-      <h2>What are you looking for?</h2>
-      <div className="button-group">
-        {["Apple", "Bat", "Cat", "Dog"].map((item) => (
-          <button
-            key={item}
-            className={`guide-button ${selected === item ? "selected" : ""}`}
-            onClick={() => {
-              setSelected(item);
-              setTimeout(() => setStep(2), 2000);
-            }}
-          >
-            {item}
-          </button>
-        ))}
+  & .tile-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  & .grey-text {
+    color: grey;
+  }
+
+  & .red-background {
+    background-color: red;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  & .bold-name {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  & .tile-image {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+  }
+`;
+
+const myClickABC = (props) => {
+  const { reccomendDevices } = props;
+  const handleClick = () => {
+    window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4,)}&entrypoint=SRCH`;
+  };
+
+  return (
+    <OuterDiv>
+      <div className="update-title">
+        <Title size="large" bold>
+          Recommended Upgrades
+        </Title>
       </div>
-    </>
-  ) : (
-    <>
-      <h2>Thanks for coming</h2>
-      <div className="button-group">
-        {["A", "B", "C", "D"].map((item) => (
-          <button key={item} className="guide-button">
-            {item}
-          </button>
-        ))}
-      </div>
-    </>
-  )}
-</div>
+      <Carousel
+        peek="standard"
+        layout="3UP"
+        gutter="20px"
+        surface="light"
+        paginationInset="12px"
+        paginationDisplay="onHover"
+        data={reccomendDevices.map((device, index) => ({
+          key: index,
+          renderItem: () => (
+            <Tile>
+              <div className="tile-left">
+                <span className="grey-text">Upgrade Offer</span>
+                <span className="red-background">Limited Time Deal</span>
+                <span className="bold-name">{device.productname}</span>
+                <Body size="large" color="grey">{device.mtn}</Body>
+                <Button size="large" use="primary" onClick={handleClick}>Upgrade</Button>
+              </div>
+              <img className="tile-image" src={formImageurl(device.imageurl, 'light')} alt={device.productname} />
+            </Tile>
+          ),
+        }))}
+      />
+    </OuterDiv>
+  );
+};
 
-
-
+export default myClickABC;
 
 
 
@@ -101,141 +134,3 @@
     <button className="guide-button">Dog</button>
   </div>
 </div>
-
-
-
-
-import React, { useState } from "react";
-import "./App.css";
-import Guide from "./Guide";
-
-export default function App() {
-  return <Guide />;
-}
-
-
-import React, { useState } from "react";
-
-export default function Guide() {
-  const [step, setStep] = useState(1);
-  const [selected, setSelected] = useState(null);
-  const [clickedButton, setClickedButton] = useState(null);
-
-  const handleFirstClick = (item) => {
-    setClickedButton(item);
-    setTimeout(() => {
-      setSelected(item);
-      setStep(2);
-      setClickedButton(null);
-    }, 2000);
-  };
-
-  const handleClearFilters = () => {
-    setSelected(null);
-    setStep(1);
-  };
-
-  return (
-    <div className="container">
-      {step === 1 ? (
-        <div className="content">
-          <h2>What are you looking for?</h2>
-          <div className="button-group">
-            {["Apple", "Bat", "Cat", "Dog"].map((item) => (
-              <button
-                key={item}
-                className={`btn ${clickedButton === item ? "active" : ""}`}
-                onClick={() => handleFirstClick(item)}
-                disabled={clickedButton !== null}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="content">
-          <h2>Thanks for coming</h2>
-          <div className="button-group">
-            {["A", "B", "C", "D"].map((item) => (
-              <button key={item} className="btn">
-                {item}
-              </button>
-            ))}
-          </div>
-          {selected && (
-            <div className="filter-bar">
-              <span className="selected-item">
-                {selected} <span className="close" onClick={handleClearFilters}>x</span>
-              </span>
-              <span className="clear" onClick={handleClearFilters}>Clear Filters</span>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-
-
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-}
-
-.button-group {
-  margin-top: 10px;
-}
-
-.btn {
-  margin: 5px;
-  padding: 10px 20px;
-  border: 2px solid black;
-  background-color: white;
-  color: black;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.btn:hover {
-  background-color: lightgray;
-}
-
-.filter-bar {
-  margin-top: 15px;
-}
-
-.selected-item {
-  display: inline-block;
-  padding: 5px 10px;
-  border: 2px solid gray;
-  color: gray;
-  font-size: 14px;
-  margin-right: 10px;
-  position: relative;
-}
-
-.close {
-  margin-left: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.clear {
-  text-decoration: underline;
-  cursor: pointer;
-  color: blue;
-}
-.btn.active {
-  background-color: black;
-  color: white;
-  border-color: black;
-}
-
-
