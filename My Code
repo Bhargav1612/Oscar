@@ -3,118 +3,82 @@ import { Body, Title, Button } from '@vxx/buttons';
 import styled from 'styled-components';
 import { domainurl } from '../../helper';
 import { formImageurl } from '../auto/utils';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import { Pagination, Scrollbar } from 'swiper/modules';
+import useEmblaCarousel from 'embla-carousel-react';
 
 const OuterDiv = styled.div`
   padding: 16px 24px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
-  gap: 20px;
 
-  .update-title {
-    font-weight: bold;
+  .carousel-container {
+    overflow: hidden;
+    width: 100%;
   }
 
-  .swiper-container {
-    width: 100%;
+  .carousel-slide {
+    display: flex;
   }
 
   .tile {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     background-color: white;
-    border-radius: 12px;
-    padding: 16px;
     height: 200px;
     width: 100%;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  .tile-content {
+  .tile-left {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
 
-  .grey-text {
-    color: grey;
-  }
-
-  .highlighted-text {
-    background-color: red;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
-
-  .bold-name {
-    font-size: 20px;
-    font-weight: bold;
-  }
-
-  .tile img {
-    height: 100%;
-    border-radius: 12px;
+  .tile-right img {
+    height: 100px;
+    width: auto;
+    border-radius: 8px;
   }
 `;
 
-const myClickABC = (props) => {
-  const { mtn, imageurl, productname, currentname, currentbrand, amount } = props;
-  const buttonName = "Update";
-  const handleClick = () => {
-    window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4)}&entrypoint=SRCH`;
+const myClickABC = ({ reccomendDevices }) => {
+  const [emblaRef] = useEmblaCarousel();
+
+  const handleClick = (reccomendUrl, processMtn) => {
+    window.location.href = `${domainurl(window.location.hostname)}/${reccomendUrl}?intent=EUP&nHash=${processMtn.slice(-4)}&entrypoint=SRCH`;
   };
 
   return (
     <OuterDiv>
-      <div className="update-title">
-        <Title size="large" bold>
-          Update to {productname}
-        </Title>
-      </div>
-      {mtn && (
-        <Body size="large" color="#000000">
-          Hi, you can use ${amount} for {currentbrand} for {mtn.slice(0,3)}-{mtn.slice(3,6)}-{mtn.slice(6)}
-        </Body>
-      )}
-      <Swiper
-        modules={[Pagination, Scrollbar]}
-        spaceBetween={20}
-        slidesPerView={3}
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        className="swiper-container"
-      >
-        {props.reccomendDevices.map((device, index) => (
-          <SwiperSlide key={index}>
-            <div className="tile">
-              <div className="tile-content">
-                <span className="grey-text">{device.currentbrand}</span>
-                <span className="highlighted-text">Exclusive Offer</span>
-                <Title className="bold-name">{device.productname}</Title>
-                <span className="grey-text">{device.mtn}</span>
-                <Button size="large" use="primary" onClick={handleClick}>
-                  {buttonName}
-                </Button>
+      <div className="carousel-container" ref={emblaRef}>
+        <div className="carousel-slide">
+          {reccomendDevices.map((device, index) => (
+            <div key={index} className="tile">
+              <div className="tile-left">
+                <Title size="large" bold>Update to {device.productname}</Title>
+                <Body size="large" color="#000">Brand: {device.currentbrand}</Body>
+                <Body size="large" color="#000">Price: ${device.amount}</Body>
+                <Body size="large" color="#000">Model: {device.currentname}</Body>
+                <Button size="large" use="primary" onClick={() => handleClick(device.reccomendUrl, device.processMtn)}>Update</Button>
               </div>
-              <img
-                src={formImageurl(device.imageurl, 'light')}
-                alt={device.productname}
-              />
+              <div className="tile-right">
+                <img src={formImageurl(device.imageurl, 'light')} alt={device.productname} />
+              </div>
             </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+          ))}
+        </div>
+      </div>
     </OuterDiv>
   );
 };
 
 export default myClickABC;
+
 
 
 
