@@ -7,67 +7,64 @@ import Carousel from '@vxx/carousel';
 
 const OuterDiv = styled.div`
   padding: 16px 24px;
-  border: 1px 0px 1px 0px;
+  border: 1px solid #ddd;
   display: flex;
   flex-direction: column;
-
-  & .update-title {
-    padding: 16px 0px 10px 0px;
-  } 
+  gap: 20px;
 `;
 
 const Tile = styled.div`
   display: flex;
-  background-color: white;
-  height: 200px;
-  width: 100%;
-  border-radius: 12px;
-  padding: 16px;
   justify-content: space-between;
   align-items: center;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  height: 200px;
+  width: 100%;
+`;
 
-  & .tile-left {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+const TileContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
 
-  & .grey-text {
-    color: grey;
-  }
+const GreyText = styled.span`
+  color: grey;
+`;
 
-  & .red-background {
-    background-color: red;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
+const HighlightedText = styled.span`
+  background-color: red;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+`;
 
-  & .bold-name {
-    font-weight: bold;
-    font-size: 20px;
-  }
-
-  & .tile-image {
-    height: 100px;
-    width: 100px;
-    object-fit: cover;
-  }
+const BoldName = styled(Title)`
+  font-size: 20px;
+  font-weight: bold;
 `;
 
 const myClickABC = (props) => {
-  const { reccomendDevices } = props;
+  const { mtn, imageurl, productname, currentname, currentbrand, amount } = props;
+  const buttonName = "Update";
   const handleClick = () => {
-    window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4,)}&entrypoint=SRCH`;
+    window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4)}&entrypoint=SRCH`;
   };
 
   return (
     <OuterDiv>
       <div className="update-title">
         <Title size="large" bold>
-          Recommended Upgrades
+          Update to {productname}
         </Title>
       </div>
+      {mtn && (
+        <Body size="large" color="#000000">
+          Hi, you can use ${amount} for {currentbrand} for {mtn.slice(0,3)}-{mtn.slice(3,6)}-{mtn.slice(6)}
+        </Body>
+      )}
       <Carousel
         peek="standard"
         layout="3UP"
@@ -75,28 +72,31 @@ const myClickABC = (props) => {
         surface="light"
         paginationInset="12px"
         paginationDisplay="onHover"
-        data={reccomendDevices.map((device, index) => ({
-          key: index,
-          renderItem: () => (
-            <Tile>
-              <div className="tile-left">
-                <span className="grey-text">Upgrade Offer</span>
-                <span className="red-background">Limited Time Deal</span>
-                <span className="bold-name">{device.productname}</span>
-                <Body size="large" color="grey">{device.mtn}</Body>
-                <Button size="large" use="primary" onClick={handleClick}>Upgrade</Button>
-              </div>
-              <img className="tile-image" src={formImageurl(device.imageurl, 'light')} alt={device.productname} />
-            </Tile>
-          ),
-        }))}
+        data={props.reccomendDevices.map((device) => ({ onClick: handleClick }))}
+        renderItem={(device) => (
+          <Tile>
+            <TileContent>
+              <GreyText>{device.currentbrand}</GreyText>
+              <HighlightedText>Exclusive Offer</HighlightedText>
+              <BoldName>{device.productname}</BoldName>
+              <GreyText>{device.mtn}</GreyText>
+              <Button size="large" use="primary" onClick={handleClick}>
+                {buttonName}
+              </Button>
+            </TileContent>
+            <img
+              src={formImageurl(device.imageurl, 'light')}
+              alt={device.productname}
+              style={{ height: '100%', borderRadius: '12px' }}
+            />
+          </Tile>
+        )}
       />
     </OuterDiv>
   );
 };
 
 export default myClickABC;
-
 
 
 
