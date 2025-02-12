@@ -1,97 +1,78 @@
 import React from "react";
 import styled from "styled-components";
-import { TitleLockup } from "@vds/type-lockups";
-import { TileContainer } from "@vds/tiles";
-import { ButtonGroup } from "@vds/buttons";
 import { Carousel } from "@vds/carousels";
 
-// Wrapper Styles
-const Wrapper = styled.div`
-  background: ${(props) => (props.$surface === "dark" ? "#131313" : "#f6f6f6")};
-  padding-top: 10px;
+// Wrapper for the entire section
+const TemplateWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  padding: 20px;
   box-sizing: border-box;
-  overflow-y: auto;
+  background: ${(props) => (props.$surface === "dark" ? "#131313" : "#f6f6f6")};
 `;
 
+// Title Section
+const TitleSection = styled.div`
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+// Tile Wrapper
 const TileWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  align-items: center;
+  text-align: center;
+  padding: 16px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
-const TileSectionWrapper = styled.div`
+// Image & Button Section
+const ImageButtonSection = styled.div`
   display: flex;
-  align-self: center;
-  text-align: center;
-  text-align: -webkit-center;
-  margin-top: auto;
-  padding-top: 12px;
-  overflow: hidden;
-  max-width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+`;
 
-  img {
-    max-height: 100%;
-    max-width: 100%;
+// Button
+const BuyButton = styled.button`
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    background-color: #0056b3;
   }
 `;
 
-// Sample Tile Data
-const data = [
-  {
-    id: "tileOne",
-    title: {
-      size: "titleLarge",
-      primitive: "h2",
-      children: "Get double the storage on us",
-    },
-    subtitle: {
-      size: "bodyMedium",
-      primitive: "h3",
-      children: "Get 512GB for the price of the 256GB when you...",
-    },
-    tooltip: {
-      ariaLabel: "More information for Get double the storage",
-      containerId: "tileOne",
-      children: "Up to $2.99 (52 GB only) device payment or full price.",
-    },
-    img: {
-      src: "https://sghaha/slide1",
-    },
-    backgroundColor: "white",
-    showBorder: true,
-    onClick: () => alert("You clicked on the Tile Container."),
-    ariaLabel: "Get double the storage on us",
-  },
-];
+// Image Styling
+const ProductImage = styled.img`
+  width: 80px;
+  height: auto;
+  margin-left: 10px;
+`;
 
-// Tile Component
-const Tile = (props) => (
-  <TileContainer {...props} padding={props.viewport === "mobile" ? "12px" : "24px"}>
-    <TileWrapper>
-      <TitleLockup
-        surface="light"
-        width="100%"
-        data={{ title: props.title, subtitle: props.subtitle }}
-      />
-      <TileSectionWrapper>
-        {props.img && <img alt={props.title.children} src={props.img.src} />}
-        {props.buttonData && <ButtonGroup data={props.buttonData} />}
-      </TileSectionWrapper>
-    </TileWrapper>
-  </TileContainer>
-);
-
-// Carousel Component
-const TileCarousel = ({ surface }) => {
+const MyClickTemplate = ({ reccomendDevices }) => {
   return (
-    <Wrapper $surface={surface}>
+    <TemplateWrapper>
+      {/* Title Section */}
+      <TitleSection>
+        <h1>Recommended Devices</h1>
+      </TitleSection>
+
+      {/* Carousel Section */}
       <Carousel
         layout="3UP"
         gutter="24px"
         peek="standard"
-        surface={surface}
+        surface="light"
         paginationInset="12px"
         aspectRatio="2:3"
         viewportOverride={{
@@ -101,137 +82,34 @@ const TileCarousel = ({ surface }) => {
           tabletLarge: { layout: "3UP" },
           desktop: { layout: "3UP" },
         }}
-        pagination={{
-          kind: "lowContrast",
-          hideBorder: true,
-        }}
+        pagination={{ kind: "lowContrast", hideBorder: true }}
         floating
         paginationDisplay="onHover"
-        data={data}
-        renderItem={(item) => <Tile key={item.id} {...item} />}
+        data={reccomendDevices.map((device, index) => ({
+          id: `tile-${index}`,
+          title: device.productname,
+          subtitle1: `Brand: ${device.currentbrand}`,
+          subtitle2: `Price: ${device.amount}`,
+          subtitle3: "Limited Offer!",
+          img: device.imageurl,
+        }))}
+        renderItem={(item) => (
+          <TileWrapper key={item.id}>
+            <h2>{item.title}</h2>
+            <h3>{item.subtitle1}</h3>
+            <h3>{item.subtitle2}</h3>
+            <h3>{item.subtitle3}</h3>
+
+            {/* Image & Button Section */}
+            <ImageButtonSection>
+              <BuyButton onClick={() => alert(`Buying ${item.title}`)}>Buy Now</BuyButton>
+              <ProductImage src={item.img} alt={item.title} />
+            </ImageButtonSection>
+          </TileWrapper>
+        )}
       />
-    </Wrapper>
+    </TemplateWrapper>
   );
 };
 
-export default TileCarousel;
-
-
-
-import React from 'react';
-import { Body, Title } from '@vxx/buttons';
-import styled from 'styled-components';
-import { domainurl } from '../../helper';
-import { formImageurl } from '../auto/utils';
-
-const OuterDiv = styled.div`
-  padding: 16px 24px;
-  border: 1px solid #ccc;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  & .update-title {
-    padding: 16px 0px 10px 0px;
-  }
-
-  & .tile-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  & .nav-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
-  }
-
-  & .update-img {
-    height: 172px;
-    max-width: 100px;
-  }
-
-  @media (max-width: 768px) {
-    & .update-img {
-      display: none;
-    }
-  }
-`;
-
-const myClickABC = (props) => {
-  const { mtn, imageurl, productname, currentbrand, amount } = props;
-  const handleClick = () => {
-    window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4)}&entrypoint=SRCH`;
-  };
-  const url = formImageurl(imageurl, 'light');
-
-  return (
-    <OuterDiv>
-      <div>
-        <div className="update-container">
-          <div className="update-title">
-            <Title size="large" bold>
-              Update to {productname}
-            </Title>
-          </div>
-          {mtn && (
-            <Body size="large" color="#000000">
-              Hi here u can use ${amount} for {currentbrand} for {mtn.slice(0, 3)}-{mtn.slice(3, 6)}-{mtn.slice(6)}
-            </Body>
-          )}
-        </div>
-      </div>
-      {imageurl && (
-        <div className="tile-container">
-          <button className="nav-button" onClick={handleClick}>{'<'}</button>
-          <img className="update-img" src={url} alt={productname} />
-          <button className="nav-button" onClick={handleClick}>{'>'}</button>
-        </div>
-      )}
-    </OuterDiv>
-  );
-};
-
-export default myClickABC;
-
-
-
-
-<div className="guided-container">
-  <style>
-    {`
-    .guided-container {
-      text-align: center;
-      font-family: Arial, sans-serif;
-      margin-top: 50px;
-    }
-
-    .button-group {
-      margin-top: 20px;
-    }
-
-    .guide-button {
-      border: 2px solid black;
-      background: white;
-      color: black;
-      padding: 10px 20px;
-      margin: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    `}
-  </style>
-
-  <h2>What are you looking for?</h2>
-  <div className="button-group">
-    <button className="guide-button">Apple</button>
-    <button className="guide-button">Bat</button>
-    <button className="guide-button">Cat</button>
-    <button className="guide-button">Dog</button>
-  </div>
-</div>
+export default MyClickTemplate;
