@@ -1,3 +1,12 @@
+const handleClick = (reccomendUrl, processMtn) => {
+  if (!reccomendUrl || !processMtn) return; // Prevents errors if values are missing
+  const url = `${domainurl(window.location.hostname)}/${reccomendUrl}?intent=EUP&nHash=${processMtn.slice(-4)}&entrypoint=SRCH`;
+  window.location.href = url;
+};
+
+onClick: () => handleClick(device.reccomendUrl, device.processMtn),
+onClick={button.onClick}
+
 const MyClickABC = ({ reccomendDevices }) => {
   const handleClick = (reccomendUrl, processMtn) => {
     window.location.href = `${domainurl(window.location.hostname)}/${reccomendUrl}?intent=EUP&nHash=${processMtn.slice(-4)}&entrypoint=SRCH`;
