@@ -1,3 +1,188 @@
+import React, { useState, useEffect } from 'react';
+import { Body, Title } from '@vxx/buttons';
+import styled from 'styled-components';
+import { domainurl } from '../../helper';
+import { formImageurl } from '../auto/utils';
+import { Carousel } from "@vds/carousels";
+
+const OuterDiv = styled.div`
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`;
+
+/* Tile Container */
+const TileContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 200px; /* Fixed height for a rectangular look */
+  width: 100%;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-sizing: border-box;
+  cursor: pointer;
+`;
+
+/* Content Wrapper (Left Side) */
+const ContentWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-right: 16px;
+`;
+
+/* Image Wrapper (Right Side) */
+const ImageWrapper = styled.div`
+  flex-shrink: 0;
+  width: 180px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+`;
+
+const MyClickABC = (props) => {
+  const { mtn, imageurl, productname, currentbrand, amount } = props;
+  const [layout, setLayout] = useState("3UP");
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setLayout(window.innerWidth < 768 ? "1UP" : "3UP");
+    };
+
+    updateLayout();
+    window.addEventListener("resize", updateLayout);
+    return () => window.removeEventListener("resize", updateLayout);
+  }, []);
+
+  const handleClick = () => {
+    window.location.href = `${domainurl(window.location.hostname)}/${props.reccomendUrl}?intent=EUP&nHash=${props.processMtn.slice(-4)}&entrypoint=SRCH`;
+  };
+
+  const url = formImageurl(imageurl, 'light');
+
+  const data = [
+    {
+      eyebrow: { size: "bodyLarge", children: "first" },
+      title: { size: "titleSmall", primitive: 'h1', children: "second" },
+      badge: { children: "third" },
+      subtitle: { size: "titleSmall", primitive: 'h1', children: "fourth" },
+      img: { src: url },
+      buttonData: [{ children: "Click", size: "large", use: "secondary", onClick: () => alert("Button clicked") }],
+      ariaLabel: "tile label"
+    },
+    // Add more data here...
+  ];
+
+  return (
+    <OuterDiv>
+      <div className="update-container">
+        <div className="update-title">
+          <Title size="large" bold>
+            Update to {productname}
+          </Title>
+        </div>
+        {mtn && (
+          <Body size="large" color="#000000">
+            Hi here you can use ${amount} for {currentbrand} for {mtn.slice(0, 3)}-{mtn.slice(3, 6)}-{mtn.slice(6)}
+          </Body>
+        )}
+      </div>
+
+      {/* Carousel Component */}
+      <div className="carousel">
+        <Carousel
+          peek="standard"
+          layout={layout}  // Responsive layout switch
+          gutter="24px"
+          surface="light"
+          paginationInset="12px"
+          paginationDisplay="onHover"
+          data={data}
+          renderItem={({ eyebrow, title, badge, subtitle, img, buttonData, id, ariaLabel }) => (
+            <TileContainer key={id} aria-label={ariaLabel}>
+              {/* Left Section (Text content) */}
+              <ContentWrapper>
+                <Body size={eyebrow.size} color="grey">{eyebrow.children}</Body>
+
+                {/* Badge */}
+                <div style={{
+                  backgroundColor: 'red',
+                  color: 'white',
+                  padding: '4px 8px',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  alignSelf: 'flex-start',
+                }}>
+                  {badge.children}
+                </div>
+
+                {/* Title */}
+                <Title size={title.size} primitive={title.primitive} bold>
+                  {title.children}
+                </Title>
+
+                {/* Subtitle */}
+                <Body size={subtitle.size} primitive={subtitle.primitive} color="grey">
+                  {subtitle.children}
+                </Body>
+
+                {/* Button Group */}
+                {buttonData && (
+                  <div>
+                    {buttonData.map((button, index) => (
+                      <button
+                        key={index}
+                        onClick={button.onClick}
+                        style={{
+                          padding: '8px 16px',
+                          fontSize: '14px',
+                          marginTop: '8px',
+                          backgroundColor: button.use === "secondary" ? 'gray' : 'blue',
+                          color: 'white',
+                          borderRadius: '4px',
+                        }}
+                      >
+                        {button.children}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </ContentWrapper>
+
+              {/* Right Section (Image) */}
+              <ImageWrapper>
+                {img && <img alt={title.children} src={img.src} />}
+              </ImageWrapper>
+            </TileContainer>
+          )}
+        />
+      </div>
+    </OuterDiv>
+  );
+};
+
+export default MyClickABC;
+
+
+
+
+
+
+
+
 
 import React from 'react';
 import { Body, Title } from '@vxx/buttons'; // Ensure using the pre-built Button and Title components
