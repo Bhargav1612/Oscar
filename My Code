@@ -1,3 +1,30 @@
+const ContentWrapper = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  
+  .eyebrow-badge {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Small spacing between eyebrow and badge */
+  }
+
+  .title {
+    margin-top: 12px; /* Spacing from badge to title */
+  }
+
+  .subtitle {
+    margin-top: 16px; /* Spacing from title to subtitle */
+  }
+
+  .button-group {
+    margin-top: 20px; /* Spacing from subtitle to button */
+  }
+`;
+
+
+
 import React, { useState, useEffect } from 'react';
 import { Body, Title } from '@vxx/buttons';
 import styled from 'styled-components';
