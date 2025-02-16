@@ -1,103 +1,82 @@
-const handleClick = (reccomendUrl, processMtn) => {
-  if (!reccomendUrl || !processMtn) return; // Prevents errors if values are missing
-  const url = `${domainurl(window.location.hostname)}/${reccomendUrl}?intent=EUP&nHash=${processMtn.slice(-4)}&entrypoint=SRCH`;
-  window.location.href = url;
-};
+import React from 'react';
+import { Body, Title, Button, Badge } from '@v/buttons';
+import { TileContainer } from '@vds/tiles';
+import { Carousel } from '@vds/carousels';
+import { domainurl } from '../../helper';
+import { formImageurl } from '../auto/utils';
 
-onClick: () => handleClick(device.reccomendUrl, device.processMtn),
-onClick={button.onClick}
+const MyClickABC = ({ recommendedDevices }) => {
+  if (!recommendedDevices || recommendedDevices.length === 0) return null;
 
-const MyClickABC = ({ reccomendDevices }) => {
+  const firstDevice = recommendedDevices[0];
+
   const handleClick = (reccomendUrl, processMtn) => {
+    if (!reccomendUrl || !processMtn) return;
     window.location.href = `${domainurl(window.location.hostname)}/${reccomendUrl}?intent=EUP&nHash=${processMtn.slice(-4)}&entrypoint=SRCH`;
   };
 
   return (
-    <OuterDiv>
+    <div style={{ padding: '16px 24px' }}>
+      {/* Title Section */}
       <div className="update-container">
-        <div className="update-title">
-          <Title size="large" bold>
-            Update your device
-          </Title>
+        <div className="update-title" style={{ paddingBottom: '10px' }}>
+          <Title size="large" bold>Update to {firstDevice.productname}</Title>
         </div>
+        {firstDevice.mtn && (
+          <Body size="large" color="#000000">
+            Hi here you can use {firstDevice.mtn} for {firstDevice.brandname1}.
+          </Body>
+        )}
       </div>
 
       {/* Carousel Component */}
-      <div className="carousel">
+      <div className="carousel-container" style={{ marginTop: '32px', marginBottom: '70px' }}>
         <Carousel
           peek="standard"
-          layout={layout}  // Responsive layout switch
+          layout="3UP"
           gutter="24px"
           surface="light"
+          pagination={{ kind: 'lowContrast', hideBorder: false, floating: true }}
           paginationInset="12px"
-          paginationDisplay="onHover"
-          data={reccomendDevices.map((device, index) => ({
-            eyebrow: { size: "bodyLarge", children: "Update here" },
-            title: { size: "titleSmall", primitive: 'h1', children: `${device.currentbrand}` },
-            badge: { children: `${device.amount}` },
-            subtitle: { size: "titleSmall", primitive: 'h1', children: `${device.productname}` },
-            img: { src: formImageurl(device.imageurl, 'light') },
-            buttonData: [{ children: "Click", size: "large", use: "secondary", onClick: () => handleClick(device.reccomendUrl, device.processMtn) }],
-          }))}
-          renderItem={({ eyebrow, title, badge, subtitle, img, buttonData, id, ariaLabel }) => (
-            <TileContainer key={id} aria-label={ariaLabel}>
-              {/* Left Section (Text content) */}
-              <ContentWrapper>
-                <div className="eyebrow-badge">
-                  <Body size={eyebrow.size} color="grey">{eyebrow.children}</Body>
-                  <div style={{
-                    backgroundColor: 'red',
-                    color: 'white',
-                    padding: '4px 8px',
-                    borderRadius: '8px',
-                    fontSize: '12px',
-                    alignSelf: 'flex-start',
-                  }}>
-                    {badge.children}
-                  </div>
+          paginationDisplay="persistent"
+          viewportOverride={{
+            mobile: { layout: '1UP' },
+            mobileLarge: { layout: '1UP' },
+            tablet: { layout: '2UP' },
+            tabletLarge: { layout: '2UP' },
+            desktop: { layout: '3UP' },
+          }}
+          data={recommendedDevices}
+          renderItem={(device) => (
+            <TileContainer padding="16px" aspectRatio="none" width="100%" height="auto">
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '16px' }}>
+                {/* Content Section */}
+                <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
+                  <Body size="bodyLarge" color="grey">Update here</Body>
+                  <Badge fillColor="red">{device.amount}</Badge>
+                  <Title size="titleSmall" primitive="h1" bold>{device.currentbrand}</Title>
+                  <Body size="titleSmall" primitive="h1">{device.productname}</Body>
+                  <Button size="large" use="secondary" onClick={() => handleClick(device.reccomendUrl, device.processMtn)}>
+                    Click Me
+                  </Button>
                 </div>
 
-                {/* Title */}
-                <Title size={title.size} primitive={title.primitive} bold className="title">
-                  {title.children}
-                </Title>
-
-                {/* Subtitle */}
-                <Body size={subtitle.size} primitive={subtitle.primitive} className="subtitle">
-                  {subtitle.children}
-                </Body>
-
-                {/* Button Group */}
-                {buttonData && (
-                  <div>
-                    {buttonData.map((button, index) => (
-                      <button
-                        key={index}
-                        onClick={button.onClick}
-                        style={{
-                          padding: '8px 16px',
-                          fontSize: '14px',
-                          marginTop: '8px',
-                          backgroundColor: button.use === "secondary" ? 'gray' : 'blue',
-                          color: 'white',
-                          borderRadius: '4px',
-                        }}
-                      >
-                        {button.children}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </ContentWrapper>
-
-              {/* Right Section (Image) */}
-              <ImageWrapper>
-                {img && <img alt={title.children} src={img.src} />}
-              </ImageWrapper>
+                {/* Image Section */}
+                <div style={{ width: '100px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <img
+                    alt={device.productname}
+                    src={formImageurl(device.imageurl, 'light')}
+                    style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '8px' }}
+                  />
+                </div>
+              </div>
             </TileContainer>
           )}
         />
       </div>
-    </OuterDiv>
+    </div>
   );
 };
+
+export default MyClickABC;
+
